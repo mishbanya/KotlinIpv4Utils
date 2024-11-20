@@ -5,9 +5,12 @@ import com.example.kotlinnetworkutils.Ipv4Comparer.isDecimalIpInBetweenOtherTwo
 import com.example.kotlinnetworkutils.Ipv4Converter.convertBinaryIpToDecimalIp
 import com.example.kotlinnetworkutils.Ipv4Converter.convertByteIpToDecimalIp
 import com.example.kotlinnetworkutils.Ipv4Converter.convertDecimalIpToBinaryIp
+import com.example.kotlinnetworkutils.Ipv4Converter.convertPrefixToDecimalMask
 import com.example.kotlinnetworkutils.Ipv4Validator.isBinaryIpLegal
 import com.example.kotlinnetworkutils.Ipv4Validator.isDecimalIpLegal
 import com.example.kotlinnetworkutils.Ipv4Validator.isDecimalMaskLegal
+import java.net.Inet4Address
+import java.net.InterfaceAddress
 
 /**
  * Represents an IPv4 subnet, defined by an IP address and a subnet mask in decimal format.
@@ -16,9 +19,10 @@ import com.example.kotlinnetworkutils.Ipv4Validator.isDecimalMaskLegal
  * @property decimalMask the subnet mask in decimal format (e.g., "255.255.255.0").
  */
 class Ipv4Subnet(
-    val decimalIp: DecimalIp,
-    val decimalMask: DecimalMask
+    private val decimalIp: DecimalIp,
+    private val decimalMask: DecimalMask
 ) {
+
     /**
      * Secondary constructor for creating an IPv4 subnet from binary representations of the IP address and subnet mask.
      *
@@ -32,6 +36,23 @@ class Ipv4Subnet(
     ) : this(
         decimalIp = DecimalIp(convertBinaryIpToDecimalIp(binaryIp.binaryIpAddress)),
         decimalMask = DecimalMask(convertBinaryIpToDecimalIp(binaryMask.binaryMaskAddress))
+    )
+
+    /**
+     * Secondary constructor for initializing the object using an `InterfaceAddress`.
+     *
+     * This constructor extracts the IP address and subnet mask from the provided `InterfaceAddress` object.
+     * It converts the IPv4 address to a `DecimalIp` and the network prefix length to a `DecimalMask`.
+     *
+     * @param interfaceAddress the `InterfaceAddress` containing the IP address and network prefix length.
+     * @throws IllegalArgumentException if the address is invalid or cannot be converted.
+     * @throws NullPointerException if the host address is null.
+     */
+    constructor(
+        interfaceAddress: InterfaceAddress
+    ) : this(
+        decimalIp = DecimalIp((interfaceAddress.address as Inet4Address).hostAddress!!),
+        decimalMask = DecimalMask(convertPrefixToDecimalMask(interfaceAddress.networkPrefixLength.toInt()))
     )
 
     /**
@@ -50,22 +71,42 @@ class Ipv4Subnet(
     )
 
     /**
-     * The minimal decimal IP address within the subnet range.
+     * Gets the minimal IP address of the subnet in decimal format.
+     * This is calculated using the subnet's IP address and subnet mask.
      *
-     * Computed using the subnet's decimal IP address and subnet mask.
-     * @throws IllegalArgumentException if IP or mask are invalid.
+     * @return the minimal IP address within the subnet in decimal format.
      */
-    val minimalDecimalBorder: String =
-        getDecimalIpBordersFromDecimalIpAndMask(decimalIp.decimalIpAddress, decimalIp.decimalIpAddress).first
+    fun getMinimalDecimalBorder(): String {
+        return getDecimalIpBordersFromDecimalIpAndMask(decimalIp.decimalIpAddress, decimalMask.decimalMaskAddress).first
+    }
 
     /**
-     * The maximal decimal IP address within the subnet range.
+     * Gets the maximal IP address of the subnet in decimal format.
+     * This is calculated using the subnet's IP address and subnet mask.
      *
-     * Computed using the subnet's decimal IP address and subnet mask.
-     * @throws IllegalArgumentException if IP or mask are invalid.
+     * @return the maximal IP address within the subnet in decimal format.
      */
-    val maximalDecimalBorder: String =
-        getDecimalIpBordersFromDecimalIpAndMask(decimalIp.decimalIpAddress, decimalIp.decimalIpAddress).second
+    fun getMaximalDecimalBorder(): String {
+        return getDecimalIpBordersFromDecimalIpAndMask(decimalIp.decimalIpAddress, decimalMask.decimalMaskAddress).second
+    }
+
+    /**
+     * Gets the decimal IP address of the subnet.
+     *
+     * @return the decimal representation of the subnet's IP address.
+     */
+    fun getDecimalIp(): DecimalIp {
+        return decimalIp
+    }
+
+    /**
+     * Gets the decimal subnet mask of the subnet.
+     *
+     * @return the decimal representation of the subnet's mask.
+     */
+    fun getDecimalMask(): DecimalMask {
+        return decimalMask
+    }
 
     /**
      * Checks if a given decimal IP address is contained within the subnet.
