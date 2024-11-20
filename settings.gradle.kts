@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "KotlinNetworkUtils"
-include(":app")
+rootProject.name = "KotlinIpv4Utils"
+include(":Ipv4Utils")
  

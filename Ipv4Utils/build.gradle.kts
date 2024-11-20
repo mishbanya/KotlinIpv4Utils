@@ -4,11 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "com.example.kotlinnetworkutils"
+    group = "com.example.kotlinipv4utils"
+    namespace = "com.example.kotlinipv4utils"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.kotlinnetworkutils"
+        applicationId = "com.example.kotlinipv4utils"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

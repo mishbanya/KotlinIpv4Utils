@@ -114,8 +114,8 @@ class Ipv4Subnet(
      * @param IP the decimal IP address to check, represented as a `DecimalIp` object.
      * @throws IllegalArgumentException if the IP is invalid.
      */
-    fun subnetContains(IP: DecimalIp) {
-        isDecimalIpInSubnet(IP.decimalIpAddress, decimalIp.decimalIpAddress, decimalMask.decimalMaskAddress)
+    fun subnetContains(IP: DecimalIp): Boolean {
+        return isDecimalIpInSubnet(IP.decimalIpAddress, decimalIp.decimalIpAddress, decimalMask.decimalMaskAddress)
     }
 
     /**
@@ -124,8 +124,8 @@ class Ipv4Subnet(
      * @param IP the binary IP address to check, represented as a `BinaryIp` object.
      * @throws IllegalArgumentException if the IP is invalid.
      */
-    fun subnetContains(IP: BinaryIp) {
-        isBinaryIpInSubnet(
+    fun subnetContains(IP: BinaryIp): Boolean {
+        return isBinaryIpInSubnet(
             IP.binaryIpAddress,
             convertDecimalIpToBinaryIp(decimalIp.decimalIpAddress),
             convertDecimalIpToBinaryIp(decimalMask.decimalMaskAddress)
