@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.lib)
     alias(libs.plugins.kotlin.android)
 }
 
@@ -9,11 +9,8 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.kotlinipv4utils"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
