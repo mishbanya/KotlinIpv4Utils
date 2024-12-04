@@ -1,8 +1,8 @@
 package com.example.kotlinnetworkutils
 
-import com.example.kotlinnetworkutils.Ipv4Converter.convertBinaryIpToIntValue
-import com.example.kotlinnetworkutils.Ipv4Converter.convertByteIpToIntValue
-import com.example.kotlinnetworkutils.Ipv4Converter.convertDecimalIpToIntValue
+import com.example.kotlinnetworkutils.Ipv4Converter.convertBinaryIpAddressToIntValue
+import com.example.kotlinnetworkutils.Ipv4Converter.convertByteIpAddressToIntValue
+import com.example.kotlinnetworkutils.Ipv4Converter.convertDecimalIpAddressToIntValue
 import com.example.kotlinnetworkutils.Ipv4Validator.isBinaryIpLegal
 import com.example.kotlinnetworkutils.Ipv4Validator.isByteIpLegal
 import com.example.kotlinnetworkutils.Ipv4Validator.isDecimalIpLegal
@@ -30,8 +30,8 @@ object Ipv4Comparer {
         isByteIpLegal(firstByteIp)
         isByteIpLegal(secondByteIp)
 
-        val firstValue = convertByteIpToIntValue(firstByteIp).toUInt()
-        val secondValue = convertByteIpToIntValue(secondByteIp).toUInt()
+        val firstValue = convertByteIpAddressToIntValue(firstByteIp).toUInt()
+        val secondValue = convertByteIpAddressToIntValue(secondByteIp).toUInt()
 
         return firstValue > secondValue
     }
@@ -50,8 +50,8 @@ object Ipv4Comparer {
         isDecimalIpLegal(firstDecimalIp)
         isDecimalIpLegal(secondDecimalIp)
 
-        val firstValue = convertDecimalIpToIntValue(firstDecimalIp).toUInt()
-        val secondValue = convertDecimalIpToIntValue(secondDecimalIp).toUInt()
+        val firstValue = convertDecimalIpAddressToIntValue(firstDecimalIp).toUInt()
+        val secondValue = convertDecimalIpAddressToIntValue(secondDecimalIp).toUInt()
 
         return firstValue > secondValue
     }
@@ -70,8 +70,8 @@ object Ipv4Comparer {
         isBinaryIpLegal(firstBinaryIp)
         isBinaryIpLegal(secondBinaryIp)
 
-        val firstValue = convertBinaryIpToIntValue(firstBinaryIp).toUInt()
-        val secondValue = convertBinaryIpToIntValue(secondBinaryIp).toUInt()
+        val firstValue = convertBinaryIpAddressToIntValue(firstBinaryIp).toUInt()
+        val secondValue = convertBinaryIpAddressToIntValue(secondBinaryIp).toUInt()
 
         return firstValue > secondValue
     }
@@ -92,9 +92,9 @@ object Ipv4Comparer {
         isByteIpLegal(startIp)
         isByteIpLegal(endIp)
 
-        val ipValue = convertByteIpToIntValue(byteIp).toUInt()
-        val startValue = convertByteIpToIntValue(startIp).toUInt()
-        val endValue = convertByteIpToIntValue(endIp).toUInt()
+        val ipValue = convertByteIpAddressToIntValue(byteIp).toUInt()
+        val startValue = convertByteIpAddressToIntValue(startIp).toUInt()
+        val endValue = convertByteIpAddressToIntValue(endIp).toUInt()
 
         return ipValue in startValue..endValue
     }
@@ -115,9 +115,9 @@ object Ipv4Comparer {
         isBinaryIpLegal(startIp)
         isBinaryIpLegal(endIp)
 
-        val ipValue = convertBinaryIpToIntValue(binaryIp).toUInt()
-        val startValue = convertBinaryIpToIntValue(startIp).toUInt()
-        val endValue = convertBinaryIpToIntValue(endIp).toUInt()
+        val ipValue = convertBinaryIpAddressToIntValue(binaryIp).toUInt()
+        val startValue = convertBinaryIpAddressToIntValue(startIp).toUInt()
+        val endValue = convertBinaryIpAddressToIntValue(endIp).toUInt()
 
         return ipValue in startValue..endValue
     }
@@ -138,9 +138,9 @@ object Ipv4Comparer {
         isDecimalIpLegal(startIp)
         isDecimalIpLegal(endIp)
 
-        val ipValue = convertDecimalIpToIntValue(decimalIp).toUInt()
-        val startValue = convertDecimalIpToIntValue(startIp).toUInt()
-        val endValue = convertDecimalIpToIntValue(endIp).toUInt()
+        val ipValue = convertDecimalIpAddressToIntValue(decimalIp).toUInt()
+        val startValue = convertDecimalIpAddressToIntValue(startIp).toUInt()
+        val endValue = convertDecimalIpAddressToIntValue(endIp).toUInt()
 
         return ipValue in startValue..endValue
     }

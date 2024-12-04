@@ -26,7 +26,7 @@ object Ipv4Converter {
      * @throws IllegalArgumentException if length of prefix exceeds 32 or lower then 0
      */
     @Throws(IllegalArgumentException::class)
-    fun  convertPrefixToDecimalMask(prefixLength: Int): String{
+    fun  convertPrefixToDecimalMaskAddress(prefixLength: Int): String{
 
         isPrefixLegal(prefixLength)
 
@@ -49,11 +49,11 @@ object Ipv4Converter {
      * @throws IllegalArgumentException if subnet mask is invalid subnet mask
      */
     @Throws(IllegalArgumentException::class)
-    fun convertDecimalMaskToPrefix(decimalMask: String): Int {
+    fun convertDecimalMaskAddressToPrefix(decimalMask: String): Int {
 
         isDecimalMaskLegal(decimalMask)
 
-        val binaryString = convertDecimalIpToBinaryIp(decimalMask).replace(".", "")
+        val binaryString = convertDecimalIpAddressToBinaryIpAddress(decimalMask).replace(".", "")
 
         return binaryString.count { it == '1' }
     }
@@ -66,7 +66,7 @@ object Ipv4Converter {
      * @throws IllegalArgumentException if length of prefix exceeds 32 or lower then 0
      */
     @Throws(IllegalArgumentException::class)
-    fun convertPrefixToBinaryMask(prefixLength: Int): String {
+    fun convertPrefixToBinaryMaskAddress(prefixLength: Int): String {
 
         isPrefixLegal(prefixLength)
 
@@ -83,7 +83,7 @@ object Ipv4Converter {
      * @throws IllegalArgumentException if subnet mask is invalid subnet mask
      */
     @Throws(IllegalArgumentException::class)
-    fun convertBinaryMaskToPrefix(binaryMask: String): Int {
+    fun convertBinaryMaskAddressToPrefix(binaryMask: String): Int {
 
         isBinaryIpLegal(binaryMask)
 
@@ -100,7 +100,7 @@ object Ipv4Converter {
      * @throws IllegalArgumentException if IP address is invalid
      */
     @Throws(IllegalArgumentException::class)
-    fun convertBinaryIpToDecimalIp(binaryIp: String): String {
+    fun convertBinaryIpAddressToDecimalIpAddress(binaryIp: String): String {
 
         isBinaryIpLegal(binaryIp)
 
@@ -118,7 +118,7 @@ object Ipv4Converter {
      * @throws IllegalArgumentException if IP address is invalid
      */
     @Throws(IllegalArgumentException::class)
-    fun convertDecimalIpToBinaryIp(decimalIp: String): String {
+    fun convertDecimalIpAddressToBinaryIpAddress(decimalIp: String): String {
 
         isDecimalIpLegal(decimalIp)
 
@@ -136,7 +136,7 @@ object Ipv4Converter {
      * @throws IllegalArgumentException if the IP address is invalid
      */
     @Throws(IllegalArgumentException::class)
-    fun convertBinaryIpToByteIp(binaryIp: String): ByteArray {
+    fun convertBinaryIpAddressToByteIpAddress(binaryIp: String): ByteArray {
 
         isBinaryIpLegal(binaryIp)
 
@@ -153,7 +153,7 @@ object Ipv4Converter {
      * @throws IllegalArgumentException if the byte array size is not 4
      */
     @Throws(IllegalArgumentException::class)
-    fun convertByteIpToBinaryIp(byteIp: ByteArray): String {
+    fun convertByteIpAddressToBinaryIpAddress(byteIp: ByteArray): String {
 
         isByteIpLegal(byteIp)
 
@@ -170,11 +170,11 @@ object Ipv4Converter {
      * @throws IllegalArgumentException if the IP address is invalid
      */
     @Throws(IllegalArgumentException::class)
-    fun convertDecimalIpToByteIp(decimalIp: String): ByteArray {
+    fun convertDecimalIpAddressToByteIpAddress(decimalIp: String): ByteArray {
 
         isDecimalIpLegal(decimalIp)
 
-        return convertBinaryIpToByteIp(convertDecimalIpToBinaryIp(decimalIp))
+        return convertBinaryIpAddressToByteIpAddress(convertDecimalIpAddressToBinaryIpAddress(decimalIp))
     }
 
     /**
@@ -185,11 +185,11 @@ object Ipv4Converter {
      * @throws IllegalArgumentException if the byte array size is not 4
      */
     @Throws(IllegalArgumentException::class)
-    fun convertByteIpToDecimalIp(byteIp: ByteArray): String {
+    fun convertByteIpAddressToDecimalIpAddress(byteIp: ByteArray): String {
 
         isByteIpLegal(byteIp)
 
-        return convertBinaryIpToDecimalIp(convertByteIpToBinaryIp(byteIp))
+        return convertBinaryIpAddressToDecimalIpAddress(convertByteIpAddressToBinaryIpAddress(byteIp))
     }
 
     /**
@@ -200,7 +200,7 @@ object Ipv4Converter {
      * @throws IllegalArgumentException if the byte array size is not 4
      */
     @Throws(IllegalArgumentException::class)
-    fun convertByteIpToIntValue(byteIp: ByteArray): Int {
+    fun convertByteIpAddressToIntValue(byteIp: ByteArray): Int {
 
         isByteIpLegal(byteIp)
 
@@ -219,11 +219,11 @@ object Ipv4Converter {
      * @throws IllegalArgumentException if the byte array size is not 4
      */
     @Throws(IllegalArgumentException::class)
-    fun convertDecimalIpToIntValue(decimalIp: String): Int {
+    fun convertDecimalIpAddressToIntValue(decimalIp: String): Int {
 
         isDecimalIpLegal(decimalIp)
 
-        return convertByteIpToIntValue(convertDecimalIpToByteIp(decimalIp))
+        return convertByteIpAddressToIntValue(convertDecimalIpAddressToByteIpAddress(decimalIp))
     }
 
     /**
@@ -234,10 +234,10 @@ object Ipv4Converter {
      * @throws IllegalArgumentException if the byte array size is not 4
      */
     @Throws(IllegalArgumentException::class)
-    fun convertBinaryIpToIntValue(binaryIp: String): Int {
+    fun convertBinaryIpAddressToIntValue(binaryIp: String): Int {
 
         isBinaryIpLegal(binaryIp)
 
-        return convertByteIpToIntValue(convertBinaryIpToByteIp(binaryIp))
+        return convertByteIpAddressToIntValue(convertBinaryIpAddressToByteIpAddress(binaryIp))
     }
 }

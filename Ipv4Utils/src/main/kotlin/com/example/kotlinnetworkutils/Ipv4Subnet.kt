@@ -2,15 +2,15 @@ package com.example.kotlinnetworkutils
 
 import com.example.kotlinnetworkutils.Ipv4Comparer.isBinaryIpInBetweenOtherTwo
 import com.example.kotlinnetworkutils.Ipv4Comparer.isDecimalIpInBetweenOtherTwo
-import com.example.kotlinnetworkutils.Ipv4Converter.convertBinaryIpToDecimalIp
-import com.example.kotlinnetworkutils.Ipv4Converter.convertByteIpToDecimalIp
-import com.example.kotlinnetworkutils.Ipv4Converter.convertDecimalIpToBinaryIp
-import com.example.kotlinnetworkutils.Ipv4Converter.convertPrefixToDecimalMask
+import com.example.kotlinnetworkutils.Ipv4Converter.convertBinaryIpAddressToDecimalIpAddress
+import com.example.kotlinnetworkutils.Ipv4Converter.convertBinaryMaskAddressToPrefix
+import com.example.kotlinnetworkutils.Ipv4Converter.convertByteIpAddressToDecimalIpAddress
+import com.example.kotlinnetworkutils.Ipv4Converter.convertDecimalIpAddressToBinaryIpAddress
 import com.example.kotlinnetworkutils.Ipv4Validator.isBinaryIpLegal
 import com.example.kotlinnetworkutils.Ipv4Validator.isDecimalIpLegal
 import com.example.kotlinnetworkutils.Ipv4Validator.isDecimalMaskLegal
-import java.net.Inet4Address
-import java.net.InterfaceAddress
+//import java.net.Inet4Address
+//import java.net.InterfaceAddress
 
 /**
  * Represents an IPv4 subnet, defined by an IP address and a subnet mask in decimal format.
@@ -34,26 +34,27 @@ class Ipv4Subnet(
         binaryIp: BinaryIp,
         binaryMask: BinaryMask
     ) : this(
-        decimalIp = DecimalIp(convertBinaryIpToDecimalIp(binaryIp.binaryIpAddress)),
-        decimalMask = DecimalMask(convertBinaryIpToDecimalIp(binaryMask.binaryMaskAddress))
+        decimalIp = DecimalIp(convertBinaryIpAddressToDecimalIpAddress(binaryIp.binaryIpAddress)),
+        decimalMask = DecimalMask(convertBinaryIpAddressToDecimalIpAddress(binaryMask.binaryMaskAddress))
     )
 
-    /**
-     * Secondary constructor for initializing the object using an `InterfaceAddress`.
-     *
-     * This constructor extracts the IP address and subnet mask from the provided `InterfaceAddress` object.
-     * It converts the IPv4 address to a `DecimalIp` and the network prefix length to a `DecimalMask`.
-     *
-     * @param interfaceAddress the `InterfaceAddress` containing the IP address and network prefix length.
-     * @throws IllegalArgumentException if the address is invalid or cannot be converted.
-     * @throws NullPointerException if the host address is null.
-     */
-    constructor(
-        interfaceAddress: InterfaceAddress
-    ) : this(
-        decimalIp = DecimalIp((interfaceAddress.address as Inet4Address).hostAddress!!),
-        decimalMask = DecimalMask(convertPrefixToDecimalMask(interfaceAddress.networkPrefixLength.toInt()))
-    )
+// REMOVED IN FAVOUR OF MULTIPLATFORM
+//    /**
+//     * Secondary constructor for initializing the object using an `InterfaceAddress`.
+//     *
+//     * This constructor extracts the IP address and subnet mask from the provided `InterfaceAddress` object.
+//     * It converts the IPv4 address to a `DecimalIp` and the network prefix length to a `DecimalMask`.
+//     *
+//     * @param interfaceAddress the `InterfaceAddress` containing the IP address and network prefix length.
+//     * @throws IllegalArgumentException if the address is invalid or cannot be converted.
+//     * @throws NullPointerException if the host address is null.
+//     */
+//    constructor(
+//        interfaceAddress: InterfaceAddress
+//    ) : this(
+//        decimalIp = DecimalIp((interfaceAddress.address as Inet4Address).hostAddress!!),
+//        decimalMask = DecimalMask(convertPrefixToDecimalMask(interfaceAddress.networkPrefixLength.toInt()))
+//    )
 
     /**
      * Secondary constructor for creating an IPv4 subnet from byte array representations of the IP address and subnet mask.
@@ -66,8 +67,8 @@ class Ipv4Subnet(
         byteIp: ByteIp,
         byteMask: ByteMask
     ) : this(
-        decimalIp = DecimalIp(convertByteIpToDecimalIp(byteIp.byteIpAddress)),
-        decimalMask = DecimalMask(convertByteIpToDecimalIp(byteMask.byteMaskAddress))
+        decimalIp = DecimalIp(convertByteIpAddressToDecimalIpAddress(byteIp.byteIpAddress)),
+        decimalMask = DecimalMask(convertByteIpAddressToDecimalIpAddress(byteMask.byteMaskAddress))
     )
 
     /**
@@ -127,8 +128,8 @@ class Ipv4Subnet(
     fun subnetContains(IP: BinaryIp): Boolean {
         return isBinaryIpInSubnet(
             IP.binaryIpAddress,
-            convertDecimalIpToBinaryIp(decimalIp.decimalIpAddress),
-            convertDecimalIpToBinaryIp(decimalMask.decimalMaskAddress)
+            convertDecimalIpAddressToBinaryIpAddress(decimalIp.decimalIpAddress),
+            convertDecimalIpAddressToBinaryIpAddress(decimalMask.decimalMaskAddress)
         )
     }
 
@@ -153,10 +154,12 @@ class Ipv4Subnet(
             isBinaryIpLegal(binaryIp)
             isBinaryIpLegal(binaryMask)
 
-            val ipBits = binaryIp.replace(".", "").toCharArray()
-            val maskBits = binaryMask.replace(".", "").toCharArray()
-            val prefixLength = maskBits.count { it == '1' }
+            val prefixLength = convertBinaryMaskAddressToPrefix(binaryMask)
+            if(prefixLength==32){
+                return Pair(binaryIp, binaryIp)
+            }
 
+            val ipBits = binaryIp.replace(".", "").toCharArray()
             val minIpBits = ipBits.take(prefixLength) + List(31 - prefixLength) { '0' } + '1'
             val maxIpBits = ipBits.take(prefixLength) + List(31 - prefixLength) { '1' } + '0'
 
@@ -186,8 +189,8 @@ class Ipv4Subnet(
             isDecimalMaskLegal(decimalMask)
 
             return getBinaryIpBordersFromBinaryIpAndMask(
-                convertDecimalIpToBinaryIp(decimalIp),
-                convertDecimalIpToBinaryIp(decimalMask)
+                convertDecimalIpAddressToBinaryIpAddress(decimalIp),
+                convertDecimalIpAddressToBinaryIpAddress(decimalMask)
             )
         }
 
@@ -212,8 +215,8 @@ class Ipv4Subnet(
 
             val binaryBorders = getBinaryIpBordersFromBinaryIpAndMask(binaryIp, binaryMask)
             return Pair(
-                convertBinaryIpToDecimalIp(binaryBorders.first),
-                convertBinaryIpToDecimalIp(binaryBorders.second)
+                convertBinaryIpAddressToDecimalIpAddress(binaryBorders.first),
+                convertBinaryIpAddressToDecimalIpAddress(binaryBorders.second)
             )
         }
 
@@ -237,12 +240,12 @@ class Ipv4Subnet(
             isDecimalMaskLegal(decimalMask)
 
             val binaryBorders = getBinaryIpBordersFromBinaryIpAndMask(
-                convertDecimalIpToBinaryIp(decimalIp),
-                convertDecimalIpToBinaryIp(decimalMask)
+                convertDecimalIpAddressToBinaryIpAddress(decimalIp),
+                convertDecimalIpAddressToBinaryIpAddress(decimalMask)
             )
             return Pair(
-                convertBinaryIpToDecimalIp(binaryBorders.first),
-                convertBinaryIpToDecimalIp(binaryBorders.second)
+                convertBinaryIpAddressToDecimalIpAddress(binaryBorders.first),
+                convertBinaryIpAddressToDecimalIpAddress(binaryBorders.second)
             )
         }
 
